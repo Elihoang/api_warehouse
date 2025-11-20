@@ -1,0 +1,11 @@
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\bin\Debug\net9.0\BeWarehouseHub.Share.deps.json
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\bin\Debug\net9.0\BeWarehouseHub.Share.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\bin\Debug\net9.0\BeWarehouseHub.Share.pdb
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.GeneratedMSBuildEditorConfig.editorconfig
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.AssemblyInfoInputs.cache
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.AssemblyInfo.cs
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.csproj.CoreCompileInputs.cache
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\refint\BeWarehouseHub.Share.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.pdb
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\ref\BeWarehouseHub.Share.dll

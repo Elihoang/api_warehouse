@@ -1,0 +1,11 @@
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\bin\Debug\net9.0\BeWarehouseHub.Domain.deps.json
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\bin\Debug\net9.0\BeWarehouseHub.Domain.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\bin\Debug\net9.0\BeWarehouseHub.Domain.pdb
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.AssemblyInfoInputs.cache
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.AssemblyInfo.cs
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.csproj.CoreCompileInputs.cache
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\refint\BeWarehouseHub.Domain.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.pdb
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\ref\BeWarehouseHub.Domain.dll
