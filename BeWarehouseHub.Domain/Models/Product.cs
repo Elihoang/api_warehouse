@@ -23,6 +23,8 @@ public class Product
 
     [Column(TypeName = "numeric(18,2)")]
     public decimal Price { get; set; }
+    
+    public DateTime Time { get; set; }
 
     public ICollection<Stock> Stocks { get; set; }
     public ICollection<ImportDetail> ImportDetails { get; set; }

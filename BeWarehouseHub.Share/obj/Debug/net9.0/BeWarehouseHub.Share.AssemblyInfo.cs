@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BeWarehouseHub.Share")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+42debb2ad9f39eefe4f2008ceeaacede5fd74589")]
 [assembly: System.Reflection.AssemblyProductAttribute("BeWarehouseHub.Share")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BeWarehouseHub.Share")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

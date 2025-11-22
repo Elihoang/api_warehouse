@@ -72,7 +72,8 @@ namespace BeWarehouseHub.Core.Migrations
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
                     SupplierId = table.Column<Guid>(type: "uuid", nullable: true),
                     Unit = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,7 +176,8 @@ namespace BeWarehouseHub.Core.Migrations
                     ExportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExportReceiptExportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    DateExport = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -203,7 +205,8 @@ namespace BeWarehouseHub.Core.Migrations
                     ImportReceiptImportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    DateImport = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,6 +1,7 @@
-﻿namespace BeWarehouseHub.Domain.Interfaces;
+﻿using BeWarehouseHub.Domain.Models;
 
-public class IWarehouseRepository
+namespace BeWarehouseHub.Domain.Interfaces;
+
+public interface IWarehouseRepository : IRepository<Warehouse>
 {
-    
 }
