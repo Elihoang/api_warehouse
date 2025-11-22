@@ -9,3 +9,4 @@ C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.S
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\refint\BeWarehouseHub.Share.dll
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.pdb
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\ref\BeWarehouseHub.Share.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.sourcelink.json

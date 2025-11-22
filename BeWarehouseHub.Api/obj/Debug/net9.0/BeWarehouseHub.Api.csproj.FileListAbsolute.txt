@@ -61,3 +61,4 @@ C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\Microsoft.Extensio
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Physical.dll
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\Microsoft.Extensions.FileSystemGlobbing.dll
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Api\obj\Debug\net9.0\BeWarehouseHub.Api.sourcelink.json

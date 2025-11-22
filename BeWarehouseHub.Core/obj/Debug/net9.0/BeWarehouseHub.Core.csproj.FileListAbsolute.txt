@@ -17,3 +17,4 @@ C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\refint\BeWarehous
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\BeWarehouseHub.Core.pdb
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\BeWarehouseHub.Core.genruntimeconfig.cache
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\ref\BeWarehouseHub.Core.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\BeWarehouseHub.Core.sourcelink.json

@@ -1,4 +1,4 @@
-﻿// BeWarehouseHub.Api/Controllers/CategoryController.cs
+﻿
 using BeWarehouseHub.Core.Services;
 using BeWarehouseHub.Domain.Models;
 using BeWarehouseHub.Share.DTOs.Category;
@@ -80,9 +80,7 @@ public class CategoryController : ControllerBase
             CategoryName = category.CategoryName,
             ProductCount = 0
         };
-
         return Ok(result);
-
     }
 
     // PUT: api/Category/{id}

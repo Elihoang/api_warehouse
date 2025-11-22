@@ -14,4 +14,5 @@ public class ExportDetail
     public Product Product { get; set; }
 
     public int Quantity { get; set; }
+    public DateTime DateExport { get; set; }
 }

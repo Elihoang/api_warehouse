@@ -9,3 +9,4 @@ C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\refint\BeWarehouseHub.Domain.dll
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.pdb
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\ref\BeWarehouseHub.Domain.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Domain\obj\Debug\net9.0\BeWarehouseHub.Domain.sourcelink.json

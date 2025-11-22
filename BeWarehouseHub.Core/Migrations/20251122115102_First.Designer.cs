@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeWarehouseHub.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251120090015_First")]
+    [Migration("20251122115102_First")]
     partial class First
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace BeWarehouseHub.Core.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "9.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -46,6 +46,9 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<Guid>("ExportDetailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateExport")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("ExportId")
                         .HasColumnType("uuid");
@@ -97,6 +100,9 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<Guid>("ImportDetailId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateImport")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("ImportId")
                         .HasColumnType("uuid");
@@ -165,6 +171,9 @@ namespace BeWarehouseHub.Core.Migrations
 
                     b.Property<Guid?>("SupplierId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Unit")
                         .IsRequired()

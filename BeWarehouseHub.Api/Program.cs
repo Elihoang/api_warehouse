@@ -15,6 +15,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // DI cho Repository / Service
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<SupplierService>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<IStockRepository, StockRepository>();
+builder.Services.AddScoped<WarehouseService>();
+builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
 
 // CORS
 builder.Services.AddCors(options =>
@@ -29,7 +37,32 @@ builder.Services.AddCors(options =>
 
 // Swagger + Controllers
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Please enter JWT with Bearer into field",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program)); 
 
