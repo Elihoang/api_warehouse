@@ -7,14 +7,30 @@
   "targets": {
     ".NETCoreApp,Version=v9.0": {
       "BeWarehouseHub.Share/1.0.0": {
+        "dependencies": {
+          "BeWarehouseHub.Domain": "1.0.0"
+        },
         "runtime": {
           "BeWarehouseHub.Share.dll": {}
+        }
+      },
+      "BeWarehouseHub.Domain/1.0.0": {
+        "runtime": {
+          "BeWarehouseHub.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
   },
   "libraries": {
     "BeWarehouseHub.Share/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BeWarehouseHub.Domain/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

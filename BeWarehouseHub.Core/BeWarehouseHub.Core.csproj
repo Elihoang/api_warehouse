@@ -36,6 +36,8 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
+      <PackageReference Include="NPOI" Version="2.7.5" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     </ItemGroup>
 
 </Project>

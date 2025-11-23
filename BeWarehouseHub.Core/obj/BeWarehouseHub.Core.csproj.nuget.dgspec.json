@@ -87,9 +87,17 @@
               "target": "Package",
               "version": "[9.0.1, )"
             },
+            "NPOI": {
+              "target": "Package",
+              "version": "[2.7.5, )"
+            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.15.0, )"
             }
           },
           "imports": [
@@ -204,7 +212,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Domain\\BeWarehouseHub.Domain.csproj": {
+                "projectPath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Domain\\BeWarehouseHub.Domain.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BeWarehouseHub.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class First : Migration
+    public partial class AddStockjdd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,7 +43,9 @@ namespace BeWarehouseHub.Core.Migrations
                 {
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Role = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -146,14 +148,14 @@ namespace BeWarehouseHub.Core.Migrations
                 name: "Stocks",
                 columns: table => new
                 {
+                    StockId = table.Column<Guid>(type: "uuid", nullable: false),
                     WarehouseId = table.Column<Guid>(type: "uuid", nullable: false),
-                    WarehouseId1 = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stocks", x => x.WarehouseId);
+                    table.PrimaryKey("PK_Stocks", x => x.StockId);
                     table.ForeignKey(
                         name: "FK_Stocks_Products_ProductId",
                         column: x => x.ProductId,
@@ -161,8 +163,8 @@ namespace BeWarehouseHub.Core.Migrations
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Stocks_Warehouses_WarehouseId1",
-                        column: x => x.WarehouseId1,
+                        name: "FK_Stocks_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
                         principalTable: "Warehouses",
                         principalColumn: "WarehouseId",
                         onDelete: ReferentialAction.Cascade);
@@ -175,6 +177,7 @@ namespace BeWarehouseHub.Core.Migrations
                     ExportDetailId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ExportReceiptExportId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StockId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     DateExport = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -194,6 +197,12 @@ namespace BeWarehouseHub.Core.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExportDetails_Stocks_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stocks",
+                        principalColumn: "StockId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,6 +213,7 @@ namespace BeWarehouseHub.Core.Migrations
                     ImportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ImportReceiptImportId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StockId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     DateImport = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
@@ -223,6 +233,12 @@ namespace BeWarehouseHub.Core.Migrations
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ImportDetails_Stocks_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stocks",
+                        principalColumn: "StockId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -234,6 +250,11 @@ namespace BeWarehouseHub.Core.Migrations
                 name: "IX_ExportDetails_ProductId",
                 table: "ExportDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExportDetails_StockId",
+                table: "ExportDetails",
+                column: "StockId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExportReceipts_UserId",
@@ -254,6 +275,11 @@ namespace BeWarehouseHub.Core.Migrations
                 name: "IX_ImportDetails_ProductId",
                 table: "ImportDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImportDetails_StockId",
+                table: "ImportDetails",
+                column: "StockId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImportReceipts_UserId",
@@ -281,9 +307,9 @@ namespace BeWarehouseHub.Core.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stocks_WarehouseId1",
+                name: "IX_Stocks_WarehouseId",
                 table: "Stocks",
-                column: "WarehouseId1");
+                column: "WarehouseId");
         }
 
         /// <inheritdoc />
@@ -296,19 +322,19 @@ namespace BeWarehouseHub.Core.Migrations
                 name: "ImportDetails");
 
             migrationBuilder.DropTable(
-                name: "Stocks");
-
-            migrationBuilder.DropTable(
                 name: "ExportReceipts");
 
             migrationBuilder.DropTable(
                 name: "ImportReceipts");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Stocks");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Warehouses");

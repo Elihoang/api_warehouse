@@ -1,6 +1,5 @@
-﻿namespace BeWarehouseHub.Domain.Interfaces;
+﻿using BeWarehouseHub.Domain.Models;
 
-public interface IExportDetailRepository
-{
-    
-}
+namespace BeWarehouseHub.Domain.Interfaces;
+
+public interface IExportDetailRepository : IRepository<ExportDetail> { }

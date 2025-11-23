@@ -1,6 +1,5 @@
-﻿namespace BeWarehouseHub.Domain.Interfaces;
+﻿using BeWarehouseHub.Domain.Models;
 
-public interface IExportReceiptRepository
-{
-    
-}
+namespace BeWarehouseHub.Domain.Interfaces;
+
+public interface IExportReceiptRepository : IRepository<ExportReceipt> { }

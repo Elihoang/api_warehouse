@@ -1,6 +1,5 @@
-﻿namespace BeWarehouseHub.Domain.Interfaces;
+﻿using BeWarehouseHub.Domain.Models;
 
-public class IImportDetailRepository
-{
-    
-}
+namespace BeWarehouseHub.Domain.Interfaces;
+
+public interface IImportDetailRepository : IRepository<ImportDetail> { }
