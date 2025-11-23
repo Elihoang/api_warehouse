@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeWarehouseHub.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251122115102_First")]
-    partial class First
+    [Migration("20251123091327_AddStockjdd")]
+    partial class AddStockjdd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,11 +62,16 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("StockId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ExportDetailId");
 
                     b.HasIndex("ExportReceiptExportId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("StockId");
 
                     b.ToTable("ExportDetails");
                 });
@@ -119,11 +124,16 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("StockId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ImportDetailId");
 
                     b.HasIndex("ImportReceiptImportId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("StockId");
 
                     b.ToTable("ImportDetails");
                 });
@@ -191,7 +201,7 @@ namespace BeWarehouseHub.Core.Migrations
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Stock", b =>
                 {
-                    b.Property<Guid>("WarehouseId")
+                    b.Property<Guid>("StockId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -201,14 +211,14 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("WarehouseId1")
+                    b.Property<Guid>("WarehouseId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("WarehouseId");
+                    b.HasKey("StockId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("WarehouseId1");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Stocks");
                 });
@@ -245,10 +255,17 @@ namespace BeWarehouseHub.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -295,9 +312,17 @@ namespace BeWarehouseHub.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BeWarehouseHub.Domain.Models.Stock", "Stock")
+                        .WithMany()
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ExportReceipt");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.ExportReceipt", b =>
@@ -333,9 +358,17 @@ namespace BeWarehouseHub.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BeWarehouseHub.Domain.Models.Stock", "Stock")
+                        .WithMany()
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ImportReceipt");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.ImportReceipt", b =>
@@ -382,7 +415,7 @@ namespace BeWarehouseHub.Core.Migrations
 
                     b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
                         .WithMany("Stocks")
-                        .HasForeignKey("WarehouseId1")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -10,3 +10,7 @@ C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\refint\BeWarehou
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.pdb
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\ref\BeWarehouseHub.Share.dll
 C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.sourcelink.json
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\bin\Debug\net9.0\BeWarehouseHub.Domain.dll
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\bin\Debug\net9.0\BeWarehouseHub.Domain.pdb
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWarehouseHub.Share.csproj.AssemblyReference.cache
+C:\HocTap\Be-WarehouseHub\BeWarehouseHub.Share\obj\Debug\net9.0\BeWareho.62DB6F21.Up2Date

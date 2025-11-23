@@ -6,6 +6,7 @@ namespace BeWarehouseHub.Domain.Models;
 public class Stock
 {
     [Key]
+    public Guid StockId { get; set; }
     public Guid WarehouseId { get; set; }
     public Warehouse Warehouse { get; set; }
     

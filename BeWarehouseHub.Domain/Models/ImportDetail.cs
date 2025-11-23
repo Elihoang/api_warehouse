@@ -13,7 +13,9 @@ public class ImportDetail
 
     public Guid ProductId { get; set; }
     public Product Product { get; set; }
-
+    public Guid StockId { get; set; }      
+    public Stock Stock { get; set; }  
+    
     public int Quantity { get; set; }
 
     [Column(TypeName = "numeric(18,2)")]

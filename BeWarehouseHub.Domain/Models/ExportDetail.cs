@@ -9,6 +9,8 @@ public class ExportDetail
 
     public Guid ExportId { get; set; }
     public ExportReceipt ExportReceipt { get; set; }
+    public Guid StockId { get; set; }      
+    public Stock Stock { get; set; }  
 
     public Guid ProductId { get; set; }
     public Product Product { get; set; }

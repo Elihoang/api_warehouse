@@ -2,6 +2,7 @@
 
 public class StockDto
 {
+    public Guid StockId { get; set; }
     public Guid WarehouseId { get; set; }
     public string WarehouseName { get; set; } = string.Empty;
 
