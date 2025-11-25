@@ -112,9 +112,39 @@ public class ImportController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-    // [HttpGet("{id}/export-excel")]
-    // public async Task<IActionResult> ExportImportToExcel(Guid id)
-    // {
-    //    
-    // }
+    [HttpGet("{id}/export-pdf")]
+    public async Task<IActionResult> ExportPdf(Guid id)
+    {
+        var pdf = await _service.GeneratePdfAsync(id);
+        var fileName = $"PhieuNhap_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.pdf";
+        return File(pdf, "application/pdf", fileName);
+    }
+
+    [HttpGet("{id}/export-excel")]
+    public async Task<IActionResult> ExportExcel(Guid id)
+    {
+        var excel = await _service.ExportToExcelAsync(id);
+        var fileName = $"PhieuNhap_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.xlsx";
+        return File(excel, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+    [HttpPost("import-excel")]
+    public async Task<IActionResult> ImportFromExcel(IFormFile file, [FromForm] Guid warehouseId, [FromForm] Guid userId)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("Chưa chọn file");
+
+        await using var stream = file.OpenReadStream();
+        var result = await _service.ImportFromExcelAsync(stream, file.FileName, warehouseId, userId);
+
+        return result.Success
+            ? Ok(new
+            {
+                result.Message,
+                result.ImportId,
+                result.TotalItems,
+                result.TotalQuantity,
+                result.TotalAmount
+            })
+            : BadRequest(new { result.Message, errors = result.Errors });
+    }
 }

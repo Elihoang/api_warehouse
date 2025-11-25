@@ -1,4 +1,5 @@
 ﻿using BeWarehouseHub.Core.Configurations;
+using BeWarehouseHub.Core.Helpers;
 using BeWarehouseHub.Domain.Interfaces;
 using BeWarehouseHub.Domain.Models;
 using BeWarehouseHub.Share.DTOs.Import;
@@ -11,15 +12,18 @@ public class ImportReceiptService
     private readonly IImportReceiptRepository _importReceiptRepository;
     private readonly IStockRepository _stockRepository;
     private readonly AppDbContext _context;
+    private readonly IFileImportExportHelper _fileHelper;
 
     public ImportReceiptService(
         IImportReceiptRepository importReceiptRepository,
+        IFileImportExportHelper fileHelper,
         IStockRepository stockRepository,
         AppDbContext context)
     {
         _importReceiptRepository = importReceiptRepository;
         _stockRepository = stockRepository;
         _context = context;
+        _fileHelper = fileHelper;
     }
 
     public async Task<IEnumerable<ImportReceipt>> GetAllAsync()
@@ -79,6 +83,7 @@ public class ImportReceiptService
             {
                 ImportDetailId = Guid.NewGuid(),
                 ProductId = item.ProductId,
+                StockId = stock.StockId, 
                 Quantity = item.Quantity,
                 Price = item.Price,
                 DateImport = dto.ImportDate
@@ -113,4 +118,64 @@ public class ImportReceiptService
         _importReceiptRepository.DeleteAsync(receipt);
         await _context.SaveChangesAsync();
     }
+    public async Task<byte[]> ExportToExcelAsync(Guid importId)
+    {
+        var receipt = await GetByIdAsync(importId)
+                      ?? throw new KeyNotFoundException("Không tìm thấy phiếu nhập");
+
+        var dto = MapToDto(receipt);
+        return ExcelImportHelper.ExportReceiptToExcel(dto);
+    }
+    public async Task<byte[]> GeneratePdfAsync(Guid importId)
+    {
+        var receipt = await GetByIdAsync(importId)
+                      ?? throw new KeyNotFoundException("Không tìm thấy phiếu");
+
+        var dto = MapToDto(receipt);
+        return PdfImportHelper.GenerateImportReceiptPdf(dto);
+    }
+    
+    public async Task<ImportExportResult> ImportFromExcelAsync(Stream stream, string fileName, Guid warehouseId, Guid userId)
+    {
+        var helperResult = await _fileHelper.ImportImportReceiptFromExcelAsync(stream, fileName, warehouseId, userId);
+
+        if (!helperResult.Success) return helperResult;
+
+        var dto = new CreateImportReceiptDto
+        {
+            WarehouseId = warehouseId,
+            UserId = userId,
+            ImportDate = DateTime.UtcNow,
+            Details = helperResult.TempImportDetails!
+        };
+
+        var receipt = await CreateAsync(dto);
+
+        return new ImportExportResult
+        {
+            Success = true,
+            ImportId = receipt.ImportId,
+            Message = "Nhập kho thành công",
+            TotalItems = dto.Details.Count,
+            TotalQuantity = dto.Details.Sum(x => x.Quantity),
+            TotalAmount = dto.Details.Sum(x => x.Quantity * x.Price)
+        };
+    }
+
+    private ImportReceiptDto MapToDto(ImportReceipt r) => new()
+    {
+        ImportId = r.ImportId,
+        ImportDate = r.ImportDate,
+        WarehouseName = r.Warehouse?.WarehouseName ?? "",
+        UserName = r.User?.UserName ?? "",
+        Details = r.ImportDetails.Select(d => new ImportDetailDto
+        {
+            ProductId = d.ProductId,
+            ProductName = d.Product?.ProductName ?? "",
+            Unit = d.Product?.Unit ?? "Cái",
+            Quantity = d.Quantity,
+            Price = d.Price,
+        }).ToList()
+    };
+    
 }
