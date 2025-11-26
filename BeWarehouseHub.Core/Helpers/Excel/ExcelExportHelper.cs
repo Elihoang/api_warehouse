@@ -1,5 +1,4 @@
-﻿// File: BeWarehouseHub.Core/Helpers/Excel/ExcelExportHelper.cs
-using NPOI.SS.UserModel;
+﻿using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using BeWarehouseHub.Share.DTOs.Export;
 using NPOI.SS.Util;
@@ -8,7 +7,7 @@ namespace BeWarehouseHub.Core.Helpers.Excel
 {
     public static class ExcelExportHelper
     {
-        public static byte[] ExportExportReceiptToExcel(ExportReceiptDto receipt)
+        public static byte[] ExportReceiptToExcel(ExportReceiptDto receipt)
         {
             using var workbook = new XSSFWorkbook();
             var sheet = workbook.CreateSheet("Phiếu xuất kho");
@@ -95,30 +94,7 @@ namespace BeWarehouseHub.Core.Helpers.Excel
             }
 
             rowIdx += 3;
-
-            // Chữ ký
-            sheet.AddMergedRegion(new CellRangeAddress(rowIdx, rowIdx + 3, 0, 2));
-            sheet.AddMergedRegion(new CellRangeAddress(rowIdx, rowIdx + 3, 4, 6));
-            var sign = sheet.CreateRow(rowIdx++);
-            sign.HeightInPoints = 60;
-            sign.CreateCell(0).SetCellValue("Người nhận hàng");
-            sign.CreateCell(4).SetCellValue("Người xuất kho");
-            for (int i = 0; i <= 6; i++)
-                sign.GetCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellStyle = center;
-
-            // 3 dòng trống để ký
-            for (int i = 0; i < 3; i++)
-            {
-                var empty = sheet.CreateRow(rowIdx++);
-                empty.HeightInPoints = 40;
-                for (int j = 0; j <= 6; j++)
-                    empty.GetCell(j, MissingCellPolicy.CREATE_NULL_AS_BLANK).CellStyle = center;
-            }
-
-            // Auto size
-            for (int i = 0; i < cols.Length; i++) sheet.AutoSizeColumn(i);
-            sheet.SetColumnWidth(2, 40 * 256); // Tên sp rộng
-
+            
             using var ms = new MemoryStream();
             workbook.Write(ms);
             return ms.ToArray();

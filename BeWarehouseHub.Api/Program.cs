@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using QuestPDF.Infrastructure;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +88,7 @@ builder.Services.AddScoped<ImportReceiptService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IFileImportExportHelper, FileImportExportHelper>();
 
 // ==================== CORS ====================
 builder.Services.AddCors(options =>

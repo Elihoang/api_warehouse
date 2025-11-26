@@ -1,4 +1,5 @@
 ﻿using BeWarehouseHub.Core.Helpers.Excel;
+using BeWarehouseHub.Core.Helpers.Pdf;
 using BeWarehouseHub.Core.Services;
 using BeWarehouseHub.Share.DTOs.Export;
 using Microsoft.AspNetCore.Mvc;
@@ -111,42 +112,52 @@ public class ExportController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-   
-    [HttpGet("{id}/export-excel")]
-    [SwaggerOperation(Summary = "Xuất phiếu xuất kho ra file Excel")]
-    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> ExportExportToExcel(Guid id)
+    
+    
+    [HttpGet("{id}/export-pdf")]
+    [SwaggerOperation(Summary = "In phiếu xuất kho ra file PDF")]
+    [Produces("application/pdf")]
+    public async Task<IActionResult> ExportToPdf(Guid id)
     {
-        var receipt = await _service.GetByIdAsync(id);
-        if (receipt == null)
-            return NotFound(new { message = "Không tìm thấy phiếu xuất kho" });
-
-        // Map sang DTO để dùng chung helper
-        var exportDto = new ExportReceiptDto
+        try
         {
-            ExportId = receipt.ExportId,
-            ExportDate = receipt.ExportDate,
-            WarehouseName = receipt.Warehouse?.WarehouseName ?? "Không xác định",
-            UserName = receipt.User?.UserName ?? "Không xác định",
-            Details = receipt.ExportDetails.Select(d => new ExportDetailDto
-            {
-                ProductId = d.ProductId,
-                ProductName = d.Product?.ProductName ?? "Không rõ",
-                Unit = d.Product?.Unit ?? "Cái",
-                Quantity = d.Quantity,
-                Price = d.Product?.Price ?? 0,
-                DateExport = d.DateExport
-            }).ToList()
-        };
-        var bytes = ExcelExportHelper.ExportExportReceiptToExcel(exportDto);
-        var fileName = $"PhieuXuat_{receipt.ExportDate:yyyyMMdd}_{receipt.ExportId.ToString("N")[..8].ToUpper()}.xlsx";
+            var pdfBytes = await _service.GeneratePdfAsync(id);
 
-        // Tên file ngắn gọn nhất có thể
-        return File(bytes,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-        // "PhieuXuat.xlsx");   // khỏi đặt tên dài nữa
+            var fileName = $"PhieuXuat_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.pdf";
 
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(new { message = "Không tìm thấy phiếu xuất" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Lỗi tạo PDF", detail = ex.Message });
+        }
+    }
+    
+    [HttpGet("{id}/export-excel")]
+    public async Task<IActionResult> ExportToExcel(Guid id)
+    {
+        try
+        {
+            var bytes = await _service.ExportToExcelAsync(id);
+            var fileName = $"PhieuXuat_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.xlsx";
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        }
+        catch (KeyNotFoundException) { return NotFound("Không tìm thấy"); }
+    }
+    [HttpPost("import-excel")]
+    public async Task<IActionResult> ImportFromExcel(IFormFile file, [FromForm] Guid warehouseId, [FromForm] Guid userId)
+    {
+        if (file == null || file.Length == 0) return BadRequest("Chọn file đi bro");
 
+        await using var stream = file.OpenReadStream();
+        var result = await _service.ImportFromExcelAsync(stream, file.FileName, warehouseId, userId);
+
+        return result.Success
+            ? Ok(new { result.Message, result.ExportId, result.TotalItems, result.TotalQuantity })
+            : BadRequest(new { result.Message, errors = result.Errors });
     }
 }
