@@ -8,6 +8,10 @@ public class CreateProductDto
     [MaxLength(150)]
     public string ProductName { get; set; } = string.Empty;
 
+    public string? Description { get; set; }
+
+    public string? Image { get; set; }
+
     public Guid? CategoryId { get; set; }
 
     public Guid? SupplierId { get; set; }

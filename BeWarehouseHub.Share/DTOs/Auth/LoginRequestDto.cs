@@ -1,7 +1,7 @@
 ﻿namespace BeWarehouseHub.Share.DTOs.Auth;
 
 public record LoginRequestDto(
-    string UserName,
+    string LoginIdentifier, // Username hoặc Email
     string Password
 );
 

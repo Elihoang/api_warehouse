@@ -27,4 +27,17 @@ public class ProductService
 
     public async Task DeleteAsync(Product product)
         => await _productRepository.DeleteAsync(product);
+
+    // Các hàm lọc mới
+    public async Task<IEnumerable<Product>> GetByWarehouseIdAsync(Guid warehouseId)
+        => await _productRepository.GetByWarehouseIdAsync(warehouseId);
+
+    public async Task<IEnumerable<Product>> GetByCategoryIdAsync(Guid categoryId)
+        => await _productRepository.GetByCategoryIdAsync(categoryId);
+
+    public async Task<IEnumerable<Product>> GetByImportDateRangeAsync(DateTime startDate, DateTime endDate)
+        => await _productRepository.GetByImportDateRangeAsync(startDate, endDate);
+
+    public async Task<IEnumerable<Product>> GetByImportDateAsync(DateTime date)
+        => await _productRepository.GetByImportDateAsync(date);
 }

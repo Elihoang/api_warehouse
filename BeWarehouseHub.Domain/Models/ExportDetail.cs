@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BeWarehouseHub.Domain.Models;
 
@@ -8,7 +9,8 @@ public class ExportDetail
     public Guid ExportDetailId { get; set; }
 
     public Guid ExportId { get; set; }
-    public ExportReceipt ExportReceipt { get; set; }
+    [ForeignKey("ExportId")]
+    public virtual ExportReceipt ExportReceipt { get; set; }
     public Guid StockId { get; set; }      
     public Stock Stock { get; set; }  
 

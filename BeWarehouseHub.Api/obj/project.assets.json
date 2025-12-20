@@ -2710,11 +2710,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
+      "projectUniqueName": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
       "projectName": "BeWarehouseHub.Api",
-      "projectPath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
+      "projectPath": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
       "packagesPath": "C:\\Users\\duyho\\.nuget\\packages\\",
-      "outputPath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Api\\obj\\",
+      "outputPath": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2735,8 +2735,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj": {
-              "projectPath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj"
+            "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj": {
+              "projectPath": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj"
             }
           }
         }

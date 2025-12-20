@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BeWarehouseHub.Core.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251123091327_AddStockjdd")]
-    partial class AddStockjdd
+    [Migration("20251220153556_newtable")]
+    partial class newtable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,9 +53,6 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<Guid>("ExportId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ExportReceiptExportId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
@@ -67,7 +64,7 @@ namespace BeWarehouseHub.Core.Migrations
 
                     b.HasKey("ExportDetailId");
 
-                    b.HasIndex("ExportReceiptExportId");
+                    b.HasIndex("ExportId");
 
                     b.HasIndex("ProductId");
 
@@ -112,9 +109,6 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Property<Guid>("ImportId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ImportReceiptImportId")
-                        .HasColumnType("uuid");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(18,2)");
 
@@ -129,7 +123,7 @@ namespace BeWarehouseHub.Core.Migrations
 
                     b.HasKey("ImportDetailId");
 
-                    b.HasIndex("ImportReceiptImportId");
+                    b.HasIndex("ImportId");
 
                     b.HasIndex("ProductId");
 
@@ -170,6 +164,12 @@ namespace BeWarehouseHub.Core.Migrations
 
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(18,2)");
@@ -255,9 +255,19 @@ namespace BeWarehouseHub.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AvatarUrl")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -275,6 +285,24 @@ namespace BeWarehouseHub.Core.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.UserWarehouse", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AssignedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "WarehouseId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("UserWarehouse");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Warehouse", b =>
@@ -302,7 +330,7 @@ namespace BeWarehouseHub.Core.Migrations
                 {
                     b.HasOne("BeWarehouseHub.Domain.Models.ExportReceipt", "ExportReceipt")
                         .WithMany("ExportDetails")
-                        .HasForeignKey("ExportReceiptExportId")
+                        .HasForeignKey("ExportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -348,7 +376,7 @@ namespace BeWarehouseHub.Core.Migrations
                 {
                     b.HasOne("BeWarehouseHub.Domain.Models.ImportReceipt", "ImportReceipt")
                         .WithMany("ImportDetails")
-                        .HasForeignKey("ImportReceiptImportId")
+                        .HasForeignKey("ImportId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -424,6 +452,25 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.UserWarehouse", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.User", "User")
+                        .WithMany("UserWarehouses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany("UserWarehouses")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Warehouse");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -458,6 +505,8 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("ExportReceipts");
 
                     b.Navigation("ImportReceipts");
+
+                    b.Navigation("UserWarehouses");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Warehouse", b =>
@@ -467,6 +516,8 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("ImportReceipts");
 
                     b.Navigation("Stocks");
+
+                    b.Navigation("UserWarehouses");
                 });
 #pragma warning restore 612, 618
         }

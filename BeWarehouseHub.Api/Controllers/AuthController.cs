@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
     }
 
     /// <summary>
-    /// Đăng nhập hệ thống
+    /// Đăng nhập hệ thống (hỗ trợ username hoặc email)
     /// </summary>
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
@@ -35,9 +35,24 @@ public class AuthController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(new { message = "Dữ liệu không hợp lệ" });
 
-        var user = await FindUserByUserNameAsync(request.UserName);
+        // Tìm user theo username HOẶC email
+        var user = await FindUserByLoginIdentifierAsync(request.LoginIdentifier);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            return Unauthorized(new { message = "Tên đăng nhập hoặc mật khẩu không đúng" });
+            return Unauthorized(new { message = "Tên đăng nhập/Email hoặc mật khẩu không đúng" });
+
+        // Kiểm tra trạng thái tài khoản
+        if (user.Status == UserStatus.Locked)
+            return Unauthorized(new { message = "Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên." });
+        
+        if (user.Status == UserStatus.Inactive)
+            return Unauthorized(new { message = "Tài khoản đã ngừng hoạt động." });
+        
+        if (user.Status == UserStatus.Pending)
+            return Unauthorized(new { message = "Tài khoản chưa được kích hoạt. Vui lòng liên hệ quản trị viên." });
+
+        // Cập nhật LastLoginAt
+        user.LastLoginAt = DateTime.UtcNow;
+        await _userService.UpdateAsync(user);
 
         var accessToken = JwtHelper.GenerateAccessToken(user.UserId, user.UserName, user.Role);
         var refreshToken = JwtHelper.GenerateRefreshToken();
@@ -55,7 +70,11 @@ public class AuthController : ControllerBase
             {
                 user.UserId,
                 user.UserName,
-                role = user.Role.ToString(), 
+                user.Email,
+                user.FullName,
+                user.AvatarUrl,
+                role = user.Role.ToString(),
+                status = user.Status.ToString()
             }
         });
     }
@@ -69,9 +88,15 @@ public class AuthController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var existingUser = await FindUserByUserNameAsync(request.UserName);
-        if (existingUser != null)
-            return Conflict(new { message = "Tên đăng nhập đã được sử dụng" });
+        // Kiểm tra username đã tồn tại
+        var existingUserByUsername = await FindUserByUsernameAsync(request.UserName);
+        if (existingUserByUsername != null)
+            return Conflict(new { message = "Username đã được sử dụng" });
+
+        // Kiểm tra email đã tồn tại
+        var existingUserByEmail = await FindUserByEmailAsync(request.Email);
+        if (existingUserByEmail != null)
+            return Conflict(new { message = "Email đã được sử dụng" });
 
         if (!Enum.TryParse<Role>(request.Role, true, out var role))
             return BadRequest(new { message = "Role không hợp lệ. Chỉ chấp nhận: Staff, Manager, Admin" });
@@ -80,7 +105,7 @@ public class AuthController : ControllerBase
         {
             UserId = Guid.NewGuid(),
             UserName = request.UserName.Trim(),
-            Email = request.Email.Trim(),
+            Email = request.Email.Trim().ToLower(),
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             Role = role
         };
@@ -92,6 +117,7 @@ public class AuthController : ControllerBase
             message = "Đăng ký thành công",
             userId = newUser.UserId,
             userName = newUser.UserName,
+            email = newUser.Email,
             role = newUser.Role.ToString()
         });
     }
@@ -137,12 +163,37 @@ public class AuthController : ControllerBase
         }
     }
 
-    // === Helper riêng trong controller (gợi ý) ===
-    private async Task<User?> FindUserByUserNameAsync(string userName)
+    // === Helper Methods ===
+    
+    /// <summary>
+    /// Tìm user theo username HOẶC email
+    /// </summary>
+    private async Task<User?> FindUserByLoginIdentifierAsync(string loginIdentifier)
+    {
+        var users = await _userService.GetAllAsync();
+        return users.FirstOrDefault(u => 
+            u.UserName.Equals(loginIdentifier, StringComparison.OrdinalIgnoreCase) ||
+            u.Email.Equals(loginIdentifier, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// Tìm user theo username
+    /// </summary>
+    private async Task<User?> FindUserByUsernameAsync(string userName)
     {
         var users = await _userService.GetAllAsync();
         return users.FirstOrDefault(u => 
             u.UserName.Equals(userName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// Tìm user theo email
+    /// </summary>
+    private async Task<User?> FindUserByEmailAsync(string email)
+    {
+        var users = await _userService.GetAllAsync();
+        return users.FirstOrDefault(u => 
+            u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
     }
 }
 
