@@ -28,6 +28,18 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.Role)
             .HasConversion<string>();
+             modelBuilder.Entity<UserWarehouse>()
+        .HasKey(x => new { x.UserId, x.WarehouseId });
+
+    modelBuilder.Entity<UserWarehouse>()
+        .HasOne(x => x.User)
+        .WithMany(u => u.UserWarehouses)
+        .HasForeignKey(x => x.UserId);
+
+    modelBuilder.Entity<UserWarehouse>()
+        .HasOne(x => x.Warehouse)
+        .WithMany(w => w.UserWarehouses)
+        .HasForeignKey(x => x.WarehouseId);
 
     }
 }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "353BfNOEl1k=",
+  "dgSpecHash": "WaoUgatBiAw=",
   "success": true,
-  "projectFilePath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj",
+  "projectFilePath": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Core\\BeWarehouseHub.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\duyho\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\duyho\\.nuget\\packages\\bouncycastle.cryptography\\2.4.0\\bouncycastle.cryptography.2.4.0.nupkg.sha512",

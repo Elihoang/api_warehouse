@@ -31,6 +31,8 @@ public class ProductController : ControllerBase
             Unit = p.Unit ?? "Cái",
             CategoryId = p.CategoryId, 
             SupplierId = p.SupplierId,
+            Description = p.Description,
+            Image = p.Image,
             Price = p.Price,
             Time = p.Time,
             CategoryName = p.Category?.CategoryName,
@@ -53,6 +55,8 @@ public class ProductController : ControllerBase
             ProductId = product.ProductId,
             ProductName = product.ProductName,
             Unit = product.Unit ?? "Cái",
+            Description = product.Description,
+            Image = product.Image,
             Price = product.Price,
             Time = product.Time,
             CategoryId = product.CategoryId, 
@@ -63,6 +67,111 @@ public class ProductController : ControllerBase
 
         return Ok(dto);
     }
+
+    // ===== CÁC ENDPOINT LỌC SẢN PHẨM =====
+
+    [HttpGet("warehouse/{warehouseId}")]
+    [SwaggerOperation(Summary = "Lấy danh sách sản phẩm theo kho")]
+    public async Task<IActionResult> GetByWarehouseAsync(Guid warehouseId)
+    {
+        var products = await _service.GetByWarehouseIdAsync(warehouseId);
+
+        var result = products.Select(p => new ProductDto
+        {
+            ProductId = p.ProductId,
+            ProductName = p.ProductName,
+            Unit = p.Unit ?? "Cái",
+            Description = p.Description,
+            Image = p.Image,
+            Price = p.Price,
+            Time = p.Time,
+            CategoryId = p.CategoryId,
+            SupplierId = p.SupplierId,
+            CategoryName = p.Category?.CategoryName,
+            SupplierName = p.Supplier?.SupplierName,
+        });
+
+        return Ok(result);
+    }
+
+    [HttpGet("category/{categoryId}")]
+    [SwaggerOperation(Summary = "Lấy danh sách sản phẩm theo danh mục")]
+    public async Task<IActionResult> GetByCategoryAsync(Guid categoryId)
+    {
+        var products = await _service.GetByCategoryIdAsync(categoryId);
+
+        var result = products.Select(p => new ProductDto
+        {
+            ProductId = p.ProductId,
+            ProductName = p.ProductName,
+            Unit = p.Unit ?? "Cái",
+            Description = p.Description,
+            Image = p.Image,
+            Price = p.Price,
+            Time = p.Time,
+            CategoryId = p.CategoryId,
+            SupplierId = p.SupplierId,
+            CategoryName = p.Category?.CategoryName,
+            SupplierName = p.Supplier?.SupplierName,
+        });
+
+        return Ok(result);
+    }
+
+    [HttpGet("import-date")]
+    [SwaggerOperation(Summary = "Lấy danh sách sản phẩm theo ngày nhập (1 ngày cụ thể)")]
+    public async Task<IActionResult> GetByImportDateAsync([FromQuery] DateTime date)
+    {
+        var products = await _service.GetByImportDateAsync(date);
+
+        var result = products.Select(p => new ProductDto
+        {
+            ProductId = p.ProductId,
+            ProductName = p.ProductName,
+            Unit = p.Unit ?? "Cái",
+            Description = p.Description,
+            Image = p.Image,
+            Price = p.Price,
+            Time = p.Time,
+            CategoryId = p.CategoryId,
+            SupplierId = p.SupplierId,
+            CategoryName = p.Category?.CategoryName,
+            SupplierName = p.Supplier?.SupplierName,
+        });
+
+        return Ok(result);
+    }
+
+    [HttpGet("import-date-range")]
+    [SwaggerOperation(Summary = "Lấy danh sách sản phẩm theo khoảng thời gian nhập")]
+    public async Task<IActionResult> GetByImportDateRangeAsync(
+        [FromQuery] DateTime startDate, 
+        [FromQuery] DateTime endDate)
+    {
+        if (startDate > endDate)
+            return BadRequest(new { message = "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc" });
+
+        var products = await _service.GetByImportDateRangeAsync(startDate, endDate);
+
+        var result = products.Select(p => new ProductDto
+        {
+            ProductId = p.ProductId,
+            ProductName = p.ProductName,
+            Unit = p.Unit ?? "Cái",
+            Description = p.Description,
+            Image = p.Image,
+            Price = p.Price,
+            Time = p.Time,
+            CategoryId = p.CategoryId,
+            SupplierId = p.SupplierId,
+            CategoryName = p.Category?.CategoryName,
+            SupplierName = p.Supplier?.SupplierName,
+        });
+
+        return Ok(result);
+    }
+
+    // ===== CÁC ENDPOINT CRUD CHUẨN =====
 
     [HttpPost]
     [SwaggerOperation(Summary = "Tạo mới sản phẩm")]
@@ -75,6 +184,8 @@ public class ProductController : ControllerBase
         {
             ProductId = Guid.NewGuid(),
             ProductName = dto.ProductName,
+            Description = dto.Description,
+            Image = dto.Image,
             CategoryId = dto.CategoryId,
             SupplierId = dto.SupplierId,
             Unit = dto.Unit,
@@ -89,6 +200,8 @@ public class ProductController : ControllerBase
             ProductId = product.ProductId,
             ProductName = product.ProductName,
             Unit = product.Unit!,
+            Description = product.Description,
+            Image = product.Image,
             Price = product.Price,
             Time = product.Time,
             CategoryId = product.CategoryId, 
@@ -107,8 +220,6 @@ public class ProductController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (id != dto.ProductId)
-            return BadRequest(new { message = "Id không khớp" });
 
         var existing = await _service.GetByIdAsync(id);
         if (existing == null)
@@ -118,6 +229,8 @@ public class ProductController : ControllerBase
         existing.CategoryId = dto.CategoryId;
         existing.SupplierId = dto.SupplierId;
         existing.Unit = dto.Unit;
+        existing.Description = dto.Description;
+        existing.Image = dto.Image;
         existing.Price = dto.Price;
 
         await _service.UpdateAsync(existing);

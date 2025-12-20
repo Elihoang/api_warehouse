@@ -47,6 +47,16 @@ public class ImportReceiptService
 
     public async Task<ImportReceipt> CreateAsync(CreateImportReceiptDto dto)
     {
+        // Validate Warehouse exists
+        var warehouseExists = await _context.Warehouses.AnyAsync(w => w.WarehouseId == dto.WarehouseId);
+        if (!warehouseExists)
+            throw new KeyNotFoundException($"Không tìm thấy kho {dto.WarehouseId}");
+
+        // Validate User exists
+        var userExists = await _context.Users.AnyAsync(u => u.UserId == dto.UserId);
+        if (!userExists)
+            throw new KeyNotFoundException($"Không tìm thấy người dùng {dto.UserId}");
+
         var receipt = new ImportReceipt
         {
             ImportId = Guid.NewGuid(),
@@ -69,6 +79,7 @@ public class ImportReceiptService
             {
                 stock = new Stock
                 {
+                    StockId = Guid.NewGuid(), // Generate GUID for new stock
                     WarehouseId = dto.WarehouseId,
                     ProductId = item.ProductId,
                     Quantity = 0

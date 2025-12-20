@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RbLYg7h6BV0=",
+  "dgSpecHash": "BZs5ZLLnX2M=",
   "success": true,
-  "projectFilePath": "C:\\HocTap\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
+  "projectFilePath": "C:\\HocTap\\QLDA\\Be-WarehouseHub\\BeWarehouseHub.Api\\BeWarehouseHub.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\duyho\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\duyho\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",

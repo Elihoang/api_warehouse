@@ -96,9 +96,6 @@ public class WarehouseController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (id != dto.WarehouseId)
-            return BadRequest(new { message = "Id không khớp" });
-
         var existing = await _service.GetByIdAsync(id);
         if (existing == null)
             return NotFound(new { message = "Không tìm thấy kho" });

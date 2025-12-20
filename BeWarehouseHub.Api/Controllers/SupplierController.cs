@@ -89,9 +89,6 @@ public class SupplierController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        if (id != dto.SupplierId)
-            return BadRequest(new { message = "Id không khớp" });
-
         var existing = await _service.GetByIdAsync(id);
         if (existing == null)
             return NotFound(new { message = "Không tìm thấy nhà cung cấp" });

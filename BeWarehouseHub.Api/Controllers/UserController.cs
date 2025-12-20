@@ -28,8 +28,12 @@ public class UserController : ControllerBase
         {
             UserId = u.UserId,
             UserName = u.UserName,
+            FullName = u.FullName,
             Email = u.Email,
+            AvatarUrl = u.AvatarUrl,
+            LastLoginAt = u.LastLoginAt,
             Role = u.Role,
+            Status = u.Status,
             ImportCount = u.ImportReceipts?.Count ?? 0,
             ExportCount = u.ExportReceipts?.Count ?? 0
         });
@@ -49,8 +53,12 @@ public class UserController : ControllerBase
         {
             UserId = user.UserId,
             UserName = user.UserName,
+            FullName = user.FullName,
             Email = user.Email,
+            AvatarUrl = user.AvatarUrl,
+            LastLoginAt = user.LastLoginAt,
             Role = user.Role ,
+            Status = user.Status,
             ImportCount = user.ImportReceipts?.Count ?? 0,
             ExportCount = user.ExportReceipts?.Count ?? 0
         };
@@ -68,6 +76,9 @@ public class UserController : ControllerBase
         var user = new User
         {
             UserName = dto.UserName,
+            FullName = dto.FullName,
+            Email = dto.Email,
+            AvatarUrl = dto.AvatarUrl,
             Role = dto.Role
         };
 
@@ -77,8 +88,12 @@ public class UserController : ControllerBase
         {
             UserId = created.UserId,
             UserName = created.UserName,
+            FullName = created.FullName,
             Email = created.Email,
+            AvatarUrl = created.AvatarUrl,
+            LastLoginAt = created.LastLoginAt,
             Role = created.Role,
+            Status = created.Status,
             ImportCount = 0,
             ExportCount = 0
         };
@@ -101,8 +116,11 @@ public class UserController : ControllerBase
             return NotFound(new { message = "Không tìm thấy người dùng" });
 
         existing.UserName = dto.UserName;
+        existing.FullName = dto.FullName;
         existing.Email = dto.Email;
+        existing.AvatarUrl = dto.AvatarUrl;
         existing.Role = dto.Role;
+        existing.Status = dto.Status;
 
         await _service.UpdateAsync(existing);
         return NoContent();

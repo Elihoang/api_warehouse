@@ -9,8 +9,8 @@ public class ImportDetail
     public Guid ImportDetailId { get; set; }
 
     public Guid ImportId { get; set; }
-    public ImportReceipt ImportReceipt { get; set; }
-
+    [ForeignKey("ImportId")]
+    public virtual ImportReceipt ImportReceipt { get; set; }
     public Guid ProductId { get; set; }
     public Product Product { get; set; }
     public Guid StockId { get; set; }      

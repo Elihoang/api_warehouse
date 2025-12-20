@@ -4,6 +4,8 @@ public class ProductDto
 {
     public Guid ProductId { get; set; }
     public string ProductName { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public string? Image { get; set; }
     public string? CategoryName { get; set; }
     public Guid? CategoryId { get; set; }
     public string? SupplierName { get; set; }
