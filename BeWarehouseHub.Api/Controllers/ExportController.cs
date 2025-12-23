@@ -1,4 +1,5 @@
-﻿using BeWarehouseHub.Core.Helpers.Excel;
+﻿using BeWarehouseHub.Core.Helpers;
+using BeWarehouseHub.Core.Helpers.Excel;
 using BeWarehouseHub.Core.Helpers.Pdf;
 using BeWarehouseHub.Core.Services;
 using BeWarehouseHub.Share.DTOs.Export;
@@ -159,5 +160,32 @@ public class ExportController : ControllerBase
         return result.Success
             ? Ok(new { result.Message, result.ExportId, result.TotalItems, result.TotalQuantity })
             : BadRequest(new { result.Message, errors = result.Errors });
+    }
+
+    [HttpGet("{id}/export-html")]
+    [SwaggerOperation(Summary = "Xuất phiếu xuất kho ra file PDF từ template đẹp")]
+    [Produces("application/pdf")]
+    public async Task<IActionResult> ExportHtml(Guid id, [FromServices] IWebHostEnvironment env)
+    {
+        try
+        {
+            // 1. Generate HTML from template
+            var html = await _service.GenerateHtmlAsync(id, env.WebRootPath);
+            
+            // 2. Convert HTML to PDF
+            var pdfBytes = HtmlToPdfHelper.ConvertHtmlToPdf(html);
+            
+            // 3. Return PDF file for download
+            var fileName = $"PhieuXuat_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Lỗi tạo PDF", detail = ex.Message });
+        }
     }
 }

@@ -4,5 +4,6 @@ namespace BeWarehouseHub.Domain.Interfaces;
 
 public interface IStockRepository : IRepository<Stock>
 {
-    // Có thể thêm phương thức đặc biệt sau này
+    Task<Stock?> GetByProductAndWarehouseAsync(Guid productId, Guid warehouseId);
+    Task<IEnumerable<Stock>> GetByWarehouseIdAsync(Guid warehouseId);
 }

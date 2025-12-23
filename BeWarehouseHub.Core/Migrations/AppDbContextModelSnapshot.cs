@@ -22,6 +22,51 @@ namespace BeWarehouseHub.Core.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.AutoReorderSettings", b =>
+                {
+                    b.Property<Guid>("SettingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsAutoReorderEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("LeadTimeDays")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxStockLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MinStockLevel")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ReorderPoint")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ReorderQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("SettingId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("AutoReorderSettings");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
@@ -38,10 +83,63 @@ namespace BeWarehouseHub.Core.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.DemandForecast", b =>
+                {
+                    b.Property<Guid>("ForecastId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Accuracy")
+                        .HasColumnType("numeric(5,2)");
+
+                    b.Property<int>("ActualDemand")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Algorithm")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ForecastPeriod")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PredictedDemand")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RecommendedOrderQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("SuggestedOrderDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ForecastId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("DemandForecasts");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.ExportDetail", b =>
                 {
                     b.Property<Guid>("ExportDetailId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("BatchId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateExport")
@@ -60,6 +158,8 @@ namespace BeWarehouseHub.Core.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ExportDetailId");
+
+                    b.HasIndex("BatchId");
 
                     b.HasIndex("ExportId");
 
@@ -100,6 +200,9 @@ namespace BeWarehouseHub.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("BatchId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("DateImport")
                         .HasColumnType("timestamp with time zone");
 
@@ -119,6 +222,8 @@ namespace BeWarehouseHub.Core.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("ImportDetailId");
+
+                    b.HasIndex("BatchId");
 
                     b.HasIndex("ImportId");
 
@@ -151,6 +256,91 @@ namespace BeWarehouseHub.Core.Migrations
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("ImportReceipts");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.InventoryAudit", b =>
+                {
+                    b.Property<Guid>("AuditId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AuditCode")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("AuditDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CompletedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AuditId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("InventoryAudits");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.InventoryAuditDetail", b =>
+                {
+                    b.Property<Guid>("AuditDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ActualQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("AuditId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AuditedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("AuditedByUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SystemQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Variance")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AuditDetailId");
+
+                    b.HasIndex("AuditId");
+
+                    b.HasIndex("AuditedByUserId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("InventoryAuditDetails");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Product", b =>
@@ -194,6 +384,55 @@ namespace BeWarehouseHub.Core.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.ProductBatch", b =>
+                {
+                    b.Property<Guid>("BatchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BatchNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ManufactureDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("BatchId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("ProductBatches");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Stock", b =>
@@ -326,8 +565,50 @@ namespace BeWarehouseHub.Core.Migrations
                     b.ToTable("Warehouses");
                 });
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.AutoReorderSettings", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.DemandForecast", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.ExportDetail", b =>
                 {
+                    b.HasOne("BeWarehouseHub.Domain.Models.ProductBatch", "Batch")
+                        .WithMany("ExportDetails")
+                        .HasForeignKey("BatchId");
+
                     b.HasOne("BeWarehouseHub.Domain.Models.ExportReceipt", "ExportReceipt")
                         .WithMany("ExportDetails")
                         .HasForeignKey("ExportId")
@@ -345,6 +626,8 @@ namespace BeWarehouseHub.Core.Migrations
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Batch");
 
                     b.Navigation("ExportReceipt");
 
@@ -374,6 +657,10 @@ namespace BeWarehouseHub.Core.Migrations
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.ImportDetail", b =>
                 {
+                    b.HasOne("BeWarehouseHub.Domain.Models.ProductBatch", "Batch")
+                        .WithMany("ImportDetails")
+                        .HasForeignKey("BatchId");
+
                     b.HasOne("BeWarehouseHub.Domain.Models.ImportReceipt", "ImportReceipt")
                         .WithMany("ImportDetails")
                         .HasForeignKey("ImportId")
@@ -391,6 +678,8 @@ namespace BeWarehouseHub.Core.Migrations
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Batch");
 
                     b.Navigation("ImportReceipt");
 
@@ -418,6 +707,50 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("Warehouse");
                 });
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.InventoryAudit", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.InventoryAuditDetail", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.InventoryAudit", "InventoryAudit")
+                        .WithMany("InventoryAuditDetails")
+                        .HasForeignKey("AuditId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.User", "AuditedByUser")
+                        .WithMany()
+                        .HasForeignKey("AuditedByUserId");
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AuditedByUser");
+
+                    b.Navigation("InventoryAudit");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Product", b =>
                 {
                     b.HasOne("BeWarehouseHub.Domain.Models.Category", "Category")
@@ -431,6 +764,25 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.ProductBatch", b =>
+                {
+                    b.HasOne("BeWarehouseHub.Domain.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeWarehouseHub.Domain.Models.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Stock", b =>
@@ -486,6 +838,11 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("ImportDetails");
                 });
 
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.InventoryAudit", b =>
+                {
+                    b.Navigation("InventoryAuditDetails");
+                });
+
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Product", b =>
                 {
                     b.Navigation("ExportDetails");
@@ -493,6 +850,13 @@ namespace BeWarehouseHub.Core.Migrations
                     b.Navigation("ImportDetails");
 
                     b.Navigation("Stocks");
+                });
+
+            modelBuilder.Entity("BeWarehouseHub.Domain.Models.ProductBatch", b =>
+                {
+                    b.Navigation("ExportDetails");
+
+                    b.Navigation("ImportDetails");
                 });
 
             modelBuilder.Entity("BeWarehouseHub.Domain.Models.Supplier", b =>

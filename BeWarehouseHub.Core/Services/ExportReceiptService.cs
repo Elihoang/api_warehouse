@@ -302,4 +302,60 @@ public class ExportReceiptService
             DateExport = d.DateExport
         }).ToList() ?? new()
     };
+
+    /// <summary>
+    /// Tạo HTML từ template cho phiếu xuất kho
+    /// </summary>
+    public async Task<string> GenerateHtmlAsync(Guid exportId, string wwwrootPath)
+    {
+        var receipt = await GetByIdAsync(exportId)
+                      ?? throw new KeyNotFoundException("Không tìm thấy phiếu xuất");
+
+        var templatePath = Path.Combine(wwwrootPath, "template", "export_receipt_template.html");
+        var template = await TemplateHelper.ReadTemplateAsync(templatePath);
+
+        var totalAmount = receipt.ExportDetails?.Sum(d => d.Quantity * (d.Product?.Price ?? 0)) ?? 0;
+        var totalQuantity = receipt.ExportDetails?.Sum(d => d.Quantity) ?? 0;
+
+        // Tạo product rows
+        var productRows = TemplateHelper.GenerateProductRows(
+            receipt.ExportDetails ?? new List<ExportDetail>(),
+            (detail, index) =>
+            {
+                var subtotal = detail.Quantity * (detail.Product?.Price ?? 0);
+                return $@"<tr>
+                    <td class=""text-center"">{index}</td>
+                    <td>{detail.Product?.ProductName ?? ""}</td>
+                    <td class=""text-center"">{detail.Product?.Unit ?? "Cái"}</td>
+                    <td class=""text-center"">{detail.Quantity}</td>
+                    <td class=""text-right"">{TemplateHelper.FormatCurrency(detail.Product?.Price ?? 0)}</td>
+                    <td class=""text-right"">{TemplateHelper.FormatCurrency(subtotal)}</td>
+                </tr>";
+            });
+
+        // Thay thế placeholders
+        var replacements = new Dictionary<string, string>
+        {
+            { "CompanyName", "CÔNG TY QUẢN LÝ KHO" },
+            { "TaxCode", "0123456789" },
+            { "CompanyAddress", "123 Đường ABC, Quận 1, TP.HCM" },
+            { "PhoneNumber", "0909 123 456" },
+            { "Email", "contact@warehouse.com" },
+            { "Year", receipt.ExportDate.Year.ToString() },
+            { "ReceiptNumber", TemplateHelper.GetShortId(receipt.ExportId) },
+            { "Day", receipt.ExportDate.Day.ToString("D2") },
+            { "Month", receipt.ExportDate.Month.ToString("D2") },
+            { "WarehouseName", receipt.Warehouse?.WarehouseName ?? "" },
+            { "UserName", receipt.User?.UserName ?? "" },
+            { "CustomerName", "..." }, // Optional - có thể để trống
+            { "CustomerAddress", "..." }, // Optional
+            { "Reason", "Xuất bán hàng" }, // Optional
+            { "ProductRows", productRows },
+            { "TotalQuantity", totalQuantity.ToString() },
+            { "TotalAmount", TemplateHelper.FormatCurrency(totalAmount) },
+            { "AmountInWords", TemplateHelper.NumberToWords(totalAmount) }
+        };
+
+        return TemplateHelper.ReplacePlaceholders(template, replacements);
+    }
 }

@@ -90,6 +90,23 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IFileImportExportHelper, FileImportExportHelper>();
 
+// ==================== NEW FEATURES - 3 CHỨC NĂNG MỚI ====================
+// 1. Product Batch Management
+builder.Services.AddScoped<IProductBatchRepository, ProductBatchRepository>();
+builder.Services.AddScoped<ProductBatchService>();
+
+// 2. Inventory Audit
+builder.Services.AddScoped<IInventoryAuditRepository, InventoryAuditRepository>();
+builder.Services.AddScoped<IInventoryAuditDetailRepository, InventoryAuditDetailRepository>();
+builder.Services.AddScoped<InventoryAuditService>();
+
+// 3. Demand Forecast & Auto Reorder
+builder.Services.AddScoped<IDemandForecastRepository, DemandForecastRepository>();
+builder.Services.AddScoped<IAutoReorderSettingsRepository, AutoReorderSettingsRepository>();
+builder.Services.AddScoped<IExportDetailRepository, ExportDetailRepository>();
+builder.Services.AddScoped<DemandForecastService>();
+builder.Services.AddScoped<AutoReorderSettingsService>();
+
 // ==================== CORS ====================
 builder.Services.AddCors(options =>
 {
