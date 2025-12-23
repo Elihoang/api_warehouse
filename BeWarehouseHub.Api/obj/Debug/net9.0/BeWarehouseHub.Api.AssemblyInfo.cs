@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BeWarehouseHub.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+30169a6cb212cb745a5a51befa2d71a649fee76b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bde352ad04fd4e8afd738714bcd50b161759bd92")]
 [assembly: System.Reflection.AssemblyProductAttribute("BeWarehouseHub.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BeWarehouseHub.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

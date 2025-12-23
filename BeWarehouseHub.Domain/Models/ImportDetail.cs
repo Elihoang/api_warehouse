@@ -21,4 +21,8 @@ public class ImportDetail
     [Column(TypeName = "numeric(18,2)")]
     public decimal Price { get; set; }
     public DateTime DateImport { get; set; }
+
+    // Quản lý lô hàng
+    public Guid? BatchId { get; set; }
+    public ProductBatch? Batch { get; set; }
 }

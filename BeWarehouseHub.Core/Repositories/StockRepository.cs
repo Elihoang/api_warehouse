@@ -19,4 +19,21 @@ public class StockRepository : BaseRepository<Stock>, IStockRepository
             .Include(s => s.Product)
             .ToListAsync();
     }
+
+    public async Task<Stock?> GetByProductAndWarehouseAsync(Guid productId, Guid warehouseId)
+    {
+        return await _context.Stocks
+            .Include(s => s.Product)
+            .Include(s => s.Warehouse)
+            .FirstOrDefaultAsync(s => s.ProductId == productId && s.WarehouseId == warehouseId);
+    }
+
+    public async Task<IEnumerable<Stock>> GetByWarehouseIdAsync(Guid warehouseId)
+    {
+        return await _context.Stocks
+            .Include(s => s.Product)
+            .Include(s => s.Warehouse)
+            .Where(s => s.WarehouseId == warehouseId)
+            .ToListAsync();
+    }
 }

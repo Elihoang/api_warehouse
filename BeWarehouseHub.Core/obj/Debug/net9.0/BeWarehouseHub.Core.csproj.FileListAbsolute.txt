@@ -76,3 +76,4 @@ C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\refint\BeWar
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\BeWarehouseHub.Core.pdb
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\BeWarehouseHub.Core.genruntimeconfig.cache
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Core\obj\Debug\net9.0\ref\BeWarehouseHub.Core.dll
+C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Core\bin\Debug\net9.0\Select.Html.dep

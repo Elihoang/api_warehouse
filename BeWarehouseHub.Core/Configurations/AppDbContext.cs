@@ -20,6 +20,13 @@ public class AppDbContext : DbContext
     public DbSet<ImportDetail> ImportDetails { get; set; }
     public DbSet<ExportReceipt> ExportReceipts { get; set; }
     public DbSet<ExportDetail> ExportDetails { get; set; }
+    
+    // New features
+    public DbSet<ProductBatch> ProductBatches { get; set; }
+    public DbSet<InventoryAudit> InventoryAudits { get; set; }
+    public DbSet<InventoryAuditDetail> InventoryAuditDetails { get; set; }
+    public DbSet<DemandForecast> DemandForecasts { get; set; }
+    public DbSet<AutoReorderSettings> AutoReorderSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

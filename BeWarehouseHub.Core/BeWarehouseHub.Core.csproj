@@ -38,6 +38,7 @@
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
       <PackageReference Include="NPOI" Version="2.7.5" />
       <PackageReference Include="QuestPDF" Version="2025.7.4" />
+      <PackageReference Include="Select.HtmlToPdf.NetCore" Version="25.2.0" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     </ItemGroup>
 

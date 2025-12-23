@@ -19,4 +19,8 @@ public class ExportDetail
 
     public int Quantity { get; set; }
     public DateTime DateExport { get; set; }
+
+    // Quản lý lô hàng
+    public Guid? BatchId { get; set; }
+    public ProductBatch? Batch { get; set; }
 }
