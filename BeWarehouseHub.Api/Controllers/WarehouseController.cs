@@ -1,4 +1,4 @@
-﻿using BeWarehouseHub.Core.Services;
+using BeWarehouseHub.Core.Services;
 using BeWarehouseHub.Domain.Models;
 using BeWarehouseHub.Share.DTOs.Warehouse;
 using Microsoft.AspNetCore.Mvc;
@@ -101,7 +101,7 @@ public class WarehouseController : ControllerBase
             return NotFound(new { message = "Không tìm thấy kho" });
 
         existing.WarehouseName = dto.WarehouseName;
-        existing.Location = dto.Location;
+        existing.Location = dto.Location ?? string.Empty;
 
         await _service.UpdateAsync(existing);
         return NoContent();

@@ -61,6 +61,8 @@ public class ExportReceiptService
                 ExportDate = dto.ExportDate,
                 WarehouseId = dto.WarehouseId,
                 UserId = dto.UserId,
+                CustomerName = dto.CustomerName,
+                CustomerAddress = dto.CustomerAddress,
                 ExportDetails = new List<ExportDetail>()
             };
 
@@ -347,8 +349,8 @@ public class ExportReceiptService
             { "Month", receipt.ExportDate.Month.ToString("D2") },
             { "WarehouseName", receipt.Warehouse?.WarehouseName ?? "" },
             { "UserName", receipt.User?.UserName ?? "" },
-            { "CustomerName", "..." }, // Optional - có thể để trống
-            { "CustomerAddress", "..." }, // Optional
+            { "CustomerName", receipt.CustomerName ?? "..." },
+            { "CustomerAddress", receipt.CustomerAddress ?? "..." },
             { "Reason", "Xuất bán hàng" }, // Optional
             { "ProductRows", productRows },
             { "TotalQuantity", totalQuantity.ToString() },

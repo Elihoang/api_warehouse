@@ -14,5 +14,9 @@ public class ExportReceipt
     public Guid UserId { get; set; }
     public User User { get; set; }
 
+    // Customer Information (optional)
+    public string? CustomerName { get; set; }
+    public string? CustomerAddress { get; set; }
+
     public ICollection<ExportDetail> ExportDetails { get; set; }
 }

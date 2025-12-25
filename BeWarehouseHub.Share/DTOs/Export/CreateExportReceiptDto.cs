@@ -12,6 +12,10 @@ public class CreateExportReceiptDto
 
     public DateTime ExportDate { get; set; } = DateTime.UtcNow;
 
+    // Customer Information (optional)
+    public string? CustomerName { get; set; }
+    public string? CustomerAddress { get; set; }
+
     [Required]
     public List<CreateExportDetailDto> Details { get; set; } = new();
 }
