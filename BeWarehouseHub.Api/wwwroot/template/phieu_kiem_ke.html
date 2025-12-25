@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Phiếu Kiểm Kê Kho</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #000;
+            background: #ccc; /* Nền xám để nhìn rõ khổ giấy */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .invoice-container {
+            width: 1120px;
+            min-height: 210mm;
+            background: #fff;
+            margin: 0 auto;
+            padding: 15px 25px;
+            box-sizing: border-box;
+            position: relative;
+ 
+        }
+
+        @media print {
+            body { background: none; margin: 0; padding: 0; }
+            .invoice-container { 
+                width: 100%; 
+                border: none; 
+                margin: 0; 
+                padding: 10mm;
+                min-height: auto; 
+            }
+            @page { size: landscape; margin: 10mm; }
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .header-left { width: 60%; }
+        .header-right { width: 40%; text-align: right; }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d89cc;
+            text-transform: uppercase;
+        }
+
+        .invoice-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d89cc;
+            margin-top: 10px;
+        }
+
+        /* Thông tin kiểm kê */
+        .info-section {
+            margin: 20px 0;
+        }
+        .row-info {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .label {
+            font-weight: bold;
+            width: 200px;
+        }
+        .content {
+            flex: 1;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        /* Bảng hàng hóa */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #2d89cc; /* Dùng màu xanh như import template */
+            padding: 4px 6px;
+            font-size: 11px;
+        }
+        th {
+            background-color: #e6f7ff; /* Nền xanh nhạt như import */
+            color: #000;
+            font-weight: bold;
+            text-align: center;
+            font-size: 10px;
+        }
+        .text-left { text-align: left; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        /* Chú thích chênh lệch */
+        .note {
+            margin-top: 10px;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        /* Chữ ký */
+        .signatures {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            text-align: center;
+        }
+        .sig-box {
+            width: 22%;
+             text-align: center;
+        }
+        .sig-title { font-weight: bold; }
+        .sig-note { font-style: italic; font-size: 11px; }
+.sig-date {
+    height: 18px;           /* QUAN TRỌNG: cố định chiều cao */
+    font-style: italic;
+    font-size: 11px;
+}
+        /* Footer note */
+        .footer-note {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container">
+        <div class="header">
+            <div class="header-left">
+                <div class="company-name">{{CompanyName}}</div>
+                <div>Mã số thuế: {{TaxCode}}</div>
+                <div>Địa chỉ: {{CompanyAddress}}</div>
+                <div>Điện thoại: {{PhoneNumber}}</div>
+                <div>Email: {{Email}}</div>
+            </div>
+            <div class="header-right">
+                <div>Mẫu số: 05 - VT</div>
+                <div style="font-style: italic; white-space: nowrap;">(Ban hành theo Thông tư số 200/2014/TT-BTC Ngày 22/12/2014 của Bộ Tài chính)</div>
+                <div>Số: <strong style="color:#007bff;">{{InventoryNumber}}</strong></div>
+            </div>
+        </div>
+
+        <div class="invoice-title">BIÊN BẢN KIỂM KÊ VẬT TƯ, CÔNG CỤ, SẢN PHẨM, HÀNG HÓA</div>
+        <div class="text-center">Thời điểm kiểm kê: {{Hour}} giờ {{Minute}} ngày {{Day}} tháng {{Month}} năm {{Year}}</div>
+
+        <div class="info-section">
+            <div class="row-info">
+                <span class="label">Ban kiểm kê gồm:</span>
+               <div class="content">
+                    - Ông/Bà: ........................................chức vụ ........................................ Đại diện ........................................ Trưởng ban<br>
+                    - Ông/Bà: ........................................chức vụ ........................................ Đại diện ........................................ Ủy viên<br>
+                    - Ông/Bà: ........................................chức vụ ........................................ Đại diện ........................................ Ủy viên
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            Đã kiểm kê kho có những mặt hàng dưới đây:
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="3" style="width:25px;">STT</th>
+                    <th rowspan="3" style="width:180px;">Tên, nhãn hiệu</th>
+                    <th rowspan="3" style="width:50px;">Mã số</th>
+                    <th rowspan="3" style="width:40px;">ĐVT</th>
+                    <th colspan="2">Theo sổ kế toán</th>
+                    <th colspan="2">Theo kiểm kê</th>
+                    <th colspan="4">Chênh lệch</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">Số lượng</th>
+                    <th rowspan="2">Thành tiền</th>
+                    <th rowspan="2">Số lượng</th>
+                    <th rowspan="2">Thành tiền</th>
+                    <th colspan="2">Thừa</th>
+                    <th colspan="2">Thiếu</th>
+                </tr>
+                <tr>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                </tr>
+                <!-- Đánh số cột -->
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{InventoryRows}}
+            </tbody>
+        </table>
+
+        <div class="note">
+            * Ghi chú: Chênh lệch thừa, thiếu phải lập biên bản xử lý riêng.
+        </div>
+
+        <div class="signatures">
+            <div class="sig-box">
+                 <div class="sig-date"></div>
+                <div class="sig-title">Giám đốc</div>
+                <div class="sig-note">(Ký, ghi rõ họ tên)<br>(Ý kiến giải quyết số chênh lệch)</div>
+            </div>
+            <div class="sig-box">
+                 <div class="sig-date"></div>
+                <div class="sig-title">Kế toán trưởng</div>
+                <div class="sig-note">(Ký, họ tên)</div>
+            </div>
+            <div class="sig-box">
+                 <div class="sig-date"></div>
+                <div class="sig-title">Thủ kho</div>
+                <div class="sig-note">(Ký, họ tên)</div>
+            </div>
+         <div class="sig-box">
+    <div class="sig-date">
+        Ngày ...... tháng ...... năm ......
+    </div>
+    <div class="sig-title">Trưởng ban kiểm kê</div>
+    <div class="sig-note">(Ký, ghi rõ họ tên)</div>
+</div>
+
+        </div>
+
+    
+    </div>
+
+</body>
+</html>

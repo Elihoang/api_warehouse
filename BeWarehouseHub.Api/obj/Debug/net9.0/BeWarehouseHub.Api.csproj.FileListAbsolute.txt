@@ -268,3 +268,4 @@ C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\runtimes\win\
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Api\bin\Debug\net9.0\Select.Html.dep
+C:\HocTap\QLDA\Be-WarehouseHub\BeWarehouseHub.Api\obj\Debug\net9.0\compressed\fpoe5j19tv-qf51zex6in.gz

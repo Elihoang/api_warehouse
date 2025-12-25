@@ -175,4 +175,107 @@ public class InventoryAuditService
 
         return details;
     }
+
+    public async Task<string> GenerateHtmlAsync(Guid auditId, string webRootPath)
+    {
+        var audit = await _auditRepository.GetAuditWithDetailsAsync(auditId);
+        if (audit == null)
+            throw new KeyNotFoundException("Không tìm thấy phiếu kiểm kê");
+
+        var templatePath = Path.Combine(webRootPath, "template", "phieu_kiem_ke.html");
+        if (!File.Exists(templatePath))
+            throw new FileNotFoundException("Không tìm thấy mẫu phiếu in");
+
+        string templateContent = await File.ReadAllTextAsync(templatePath);
+
+        // Thông tin công ty (Hardcode hoặc lấy từ cấu hình)
+        var companyName = "CÔNG TY TNHH BE WAREHOUSE";
+        var taxCode = "0101234567";
+        var address = "Tầng 1, Tòa nhà ABC, 123 Đường XYZ, Quận 1, TP.HCM";
+        var phone = "028 1234 5678";
+        var email = "info@bewarehouse.com";
+
+        // Thay thế thông tin chung
+        templateContent = templateContent.Replace("{{CompanyName}}", companyName)
+                                         .Replace("{{TaxCode}}", taxCode)
+                                         .Replace("{{CompanyAddress}}", address)
+                                         .Replace("{{PhoneNumber}}", phone)
+                                         .Replace("{{Email}}", email)
+                                         .Replace("{{InventoryNumber}}", audit.AuditCode)
+                                         .Replace("{{Year}}", audit.AuditDate.Year.ToString())
+                                         .Replace("{{Month}}", audit.AuditDate.Month.ToString("D2"))
+                                         .Replace("{{Day}}", audit.AuditDate.Day.ToString("D2"))
+                                         .Replace("{{Hour}}", audit.AuditDate.Hour.ToString("D2"))
+                                         .Replace("{{Minute}}", audit.AuditDate.Minute.ToString("D2"));
+
+        // Tạo các dòng chi tiết
+        var rowsHtml = new System.Text.StringBuilder();
+        int stt = 1;
+
+        // Tính tổng cộng
+        decimal totalSystemAmount = 0;
+        decimal totalActualAmount = 0;
+        decimal totalVarianceExcessAmount = 0;
+        decimal totalVarianceShortageAmount = 0;
+
+        foreach (var detail in audit.InventoryAuditDetails)
+        {
+            var price = detail.Product?.Price ?? 0;
+            var systemAmount = detail.SystemQuantity * price;
+            var actualAmount = detail.ActualQuantity * price;
+
+            var variance = detail.Variance;
+            var varianceAmount = Math.Abs(variance) * price;
+
+            string excessQty = variance > 0 ? variance.ToString("N0") : "";
+            string excessAmt = variance > 0 ? varianceAmount.ToString("N0") : "";
+
+            string shortageQty = variance < 0 ? Math.Abs(variance).ToString("N0") : "";
+            string shortageAmt = variance < 0 ? varianceAmount.ToString("N0") : "";
+
+            totalSystemAmount += systemAmount;
+            totalActualAmount += actualAmount;
+            if (variance > 0) totalVarianceExcessAmount += varianceAmount;
+            if (variance < 0) totalVarianceShortageAmount += varianceAmount;
+
+            rowsHtml.Append("<tr>");
+            rowsHtml.Append($"<td class='text-center'>{stt++}</td>");
+            rowsHtml.Append($"<td class='text-left'>{detail.Product?.ProductName}</td>");
+            rowsHtml.Append($"<td class='text-center'>{detail.Product?.ProductId.ToString().Substring(0, 8).ToUpper()}</td>"); // Lấy 8 ký tự đầu của GUID làm mã
+            rowsHtml.Append($"<td class='text-center'>{detail.Product?.Unit}</td>");
+
+            // Sổ kế toán
+            rowsHtml.Append($"<td class='text-right'>{detail.SystemQuantity:N0}</td>");
+            rowsHtml.Append($"<td class='text-right'>{systemAmount:N0}</td>");
+
+            // Kiểm kê
+            rowsHtml.Append($"<td class='text-right'>{detail.ActualQuantity:N0}</td>");
+            rowsHtml.Append($"<td class='text-right'>{actualAmount:N0}</td>");
+
+            // Chênh lệch
+            rowsHtml.Append($"<td class='text-right'>{excessQty}</td>");
+            rowsHtml.Append($"<td class='text-right'>{excessAmt}</td>");
+            rowsHtml.Append($"<td class='text-right'>{shortageQty}</td>");
+            rowsHtml.Append($"<td class='text-right'>{shortageAmt}</td>");
+
+            rowsHtml.Append("</tr>");
+        }
+
+        // Dòng tổng cộng
+        rowsHtml.Append("<tr style='font-weight:bold; background-color:#f0f0f0;'>");
+        rowsHtml.Append("<td colspan='4' class='text-center'>Cộng</td>");
+        rowsHtml.Append($"<td class='text-right'></td>");
+        rowsHtml.Append($"<td class='text-right'>{totalSystemAmount:N0}</td>");
+        rowsHtml.Append($"<td class='text-right'></td>");
+        rowsHtml.Append($"<td class='text-right'>{totalActualAmount:N0}</td>");
+        rowsHtml.Append($"<td class='text-right'></td>");
+        rowsHtml.Append($"<td class='text-right'>{totalVarianceExcessAmount:N0}</td>");
+        rowsHtml.Append($"<td class='text-right'></td>");
+        rowsHtml.Append($"<td class='text-right'>{totalVarianceShortageAmount:N0}</td>");
+        rowsHtml.Append("</tr>");
+
+        templateContent = templateContent.Replace("{{InventoryRows}}", rowsHtml.ToString());
+
+        return templateContent;
+    }
 }

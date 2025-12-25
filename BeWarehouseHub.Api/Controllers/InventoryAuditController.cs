@@ -1,8 +1,12 @@
+using BeWarehouseHub.Core.Helpers;
 using BeWarehouseHub.Core.Services;
 using BeWarehouseHub.Domain.Models;
 using BeWarehouseHub.Share.DTOs.InventoryAudit;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.IO;
+using System.Text;
+using Microsoft.AspNetCore.Hosting;
 
 namespace BeWarehouseHub.Api.Controllers;
 
@@ -78,6 +82,48 @@ public class InventoryAuditController : ControllerBase
         var details = await _service.GetDetailsWithVarianceAsync(id);
         var result = details.Select(d => MapDetailToDto(d));
         return Ok(result);
+    }
+
+    [HttpGet("{id}/export-html")]
+    [SwaggerOperation(Summary = "Xuất phiếu kiểm kê ra file PDF")]
+    [Produces("application/pdf")]
+    public async Task<IActionResult> ExportHtml(Guid id, [FromServices] IWebHostEnvironment env)
+    {
+        try
+        {
+            var html = await _service.GenerateHtmlAsync(id, env.WebRootPath);
+            
+            if (string.IsNullOrEmpty(html))
+            {
+                return BadRequest(new { message = "HTML content is empty" });
+            }
+            
+            var pdfBytes = HtmlToPdfHelper.ConvertHtmlToPdfLandscape(html); // Landscape đã đơn giản hóa
+            
+            if (pdfBytes == null || pdfBytes.Length == 0)
+            {
+                return StatusCode(500, new { message = "PDF generation failed - empty result" });
+            }
+            
+            var fileName = $"PhieuKiemKe_{id.ToString("N")[..8].ToUpper()}_{DateTime.Today:yyyyMMdd}.pdf";
+            return File(pdfBytes, "application/pdf", fileName);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "Lỗi tạo PDF", detail = ex.Message, stackTrace = ex.StackTrace });
+        }
+    }
+     [HttpGet("{id}/export-html2")]
+    [SwaggerOperation(Summary = "Xuất phiếu kiểm kê ra file PDF")]
+    [Produces("application/pdf")]
+    public async Task<IActionResult> ExportHtml2(Guid id, [FromServices] IWebHostEnvironment env)
+    {
+            var html = await _service.GenerateHtmlAsync(id, env.WebRootPath);
+            return Content(html, "text/html; charset=utf-8");
     }
 
     [HttpPost]
